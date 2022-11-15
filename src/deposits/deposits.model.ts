@@ -42,6 +42,7 @@ export class Deposit extends Model<Deposit, DepositCreationAttrs> {
   @ForeignKey(() => User)
   @Column({
     type: DataType.INTEGER,
+    allowNull: false,
   })
   userId: number;
 

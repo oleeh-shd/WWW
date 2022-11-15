@@ -15,6 +15,41 @@ export class DepositsService {
     private userService: UsersService,
   ) {}
 
+  async getAllDepositsSum() {
+    const deposits = await this.depositRepository.findAll();
+    return deposits.reduce(
+      (acc, curr) => {
+        acc.amount += curr.amount;
+        return acc;
+      },
+      { amount: 0 },
+    );
+  }
+
+  async withdrawAnySum(amount: number) {
+    const deposits = await this.depositRepository.findAll();
+    if (!deposits.length || !amount) {
+      return;
+    }
+    let targetSum = 0;
+
+    for (let index = 0; index < deposits.length; index++) {
+      const leftToWithdraw = amount - targetSum;
+      const { amount: currAmount, id } = deposits[index];
+      const decrementBy =
+        leftToWithdraw < currAmount ? leftToWithdraw : currAmount;
+
+      if (targetSum === currAmount) continue;
+
+      await this.depositRepository.decrement('amount', {
+        by: decrementBy,
+        where: { id },
+      });
+      targetSum += decrementBy;
+    }
+    return deposits;
+  }
+
   async makeDeposit({ email, ...dto }: CreateDepositDto) {
     const deposit = await this.depositRepository.create(dto);
     const role = await this.roleService.getRoleByValue(UserRoles.INVESTOR);
