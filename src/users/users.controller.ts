@@ -2,6 +2,7 @@ import { Controller, Post, Body, Get, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/auth/roles-auth.decarator';
 import { RolesGuard } from 'src/auth/roles.guard';
+import { UserRoles } from 'src/roles/dto/create-role.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './users.model';
 import { UsersService } from './users.service';
@@ -20,7 +21,7 @@ export class UsersController {
 
   @ApiOperation({ summary: 'get all users' })
   @ApiResponse({ status: 200, type: [User] })
-  @Roles('ADMIN')
+  @Roles(UserRoles.ADMIN)
   @UseGuards(RolesGuard)
   @Get()
   getAll() {

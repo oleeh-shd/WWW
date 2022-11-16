@@ -8,6 +8,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Roles } from 'src/auth/roles-auth.decarator';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { UserRoles } from 'src/roles/dto/create-role.dto';
@@ -25,6 +26,7 @@ export class DepositsController {
   @ApiResponse({ status: 200, type: Deposit })
   @Roles(UserRoles.ADMIN)
   @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard)
   @Get()
   getAll() {
     return this.depositsServices.getAllDepositsSum();
@@ -34,6 +36,7 @@ export class DepositsController {
   @ApiResponse({ status: 201, type: Deposit })
   @Roles(UserRoles.ADMIN)
   @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard)
   @Post('/withdrawAnySum')
   withdrawAny(@Body() updateDepositDto: UpdateDepositDto) {
     return this.depositsServices.withdrawAnySum(updateDepositDto.amount);
@@ -41,6 +44,9 @@ export class DepositsController {
 
   @ApiOperation({ summary: 'get deposit by id' })
   @ApiResponse({ status: 200, type: Deposit })
+  @Roles(UserRoles.INVESTOR, UserRoles.ADMIN)
+  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard)
   @Get('/:id')
   getOne(@Param('id') id: number) {
     return this.depositsServices.getDepositById(id);
@@ -48,6 +54,7 @@ export class DepositsController {
 
   @ApiOperation({ summary: 'make deposit' })
   @ApiResponse({ status: 201, type: Deposit })
+  @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() depositDto: CreateDepositDto) {
     return this.depositsServices.makeDeposit(depositDto);
@@ -55,6 +62,9 @@ export class DepositsController {
 
   @ApiOperation({ summary: 'update deposit' })
   @ApiResponse({ status: 204, type: Deposit })
+  @Roles(UserRoles.INVESTOR, UserRoles.ADMIN)
+  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard)
   @Patch('/:id')
   update(@Param('id') id: number, @Body() updateDepositDto: UpdateDepositDto) {
     return this.depositsServices.updateDeposit(id, updateDepositDto.amount);
@@ -62,6 +72,9 @@ export class DepositsController {
 
   @ApiOperation({ summary: 'withdraw deposit' })
   @ApiResponse({ status: 204, type: Deposit })
+  @Roles(UserRoles.INVESTOR, UserRoles.ADMIN)
+  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard)
   @Post('/:id')
   withdraw(
     @Param('id') id: number,
