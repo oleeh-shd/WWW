@@ -1,0 +1,33 @@
+'use strict';
+/** @type {import('sequelize-cli').Migration} */
+module.exports = {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('deposits', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+      },
+      amount: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      currency: {
+        type: Sequelize.STRING,
+      },
+      userId: {
+        type: Sequelize.INTEGER,
+      },
+      createdAt: {
+        type: Sequelize.STRING,
+      },
+      updatedAt: {
+        type: Sequelize.STRING,
+      },
+    });
+  },
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable('deposits');
+  },
+};

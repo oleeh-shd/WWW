@@ -27,6 +27,7 @@ import { ScheduleModule } from '@nestjs/schedule';
       database: process.env.POSTGRES_DB,
       models: [User, Role, UserRoles, Deposit],
       autoLoadModels: true,
+      synchronize: false,
     }),
     ScheduleModule.forRoot(),
     UsersModule,
