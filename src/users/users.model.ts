@@ -42,6 +42,12 @@ export class User extends Model<User, UserCreationAttrs> {
   })
   password: string;
 
+  @ApiProperty({ example: '1', description: 'invitors id' })
+  @Column({
+    type: DataType.INTEGER,
+  })
+  invitedBy: number | null;
+
   @BelongsToMany(() => Role, () => UserRoles)
   roles: Role[];
 

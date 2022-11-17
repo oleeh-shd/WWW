@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Param, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { AuthService } from './auth.service';
@@ -16,5 +16,13 @@ export class AuthController {
   @Post('/registration')
   registration(@Body() userDto: CreateUserDto) {
     return this.authService.registration(userDto);
+  }
+
+  @Post('/registration/:id')
+  registrationByInvite(
+    @Param('id') id: number,
+    @Body() userDto: CreateUserDto,
+  ) {
+    return this.authService.registration({ ...userDto, invitedBy: id });
   }
 }

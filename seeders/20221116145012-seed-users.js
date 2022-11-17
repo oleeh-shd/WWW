@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 'use strict';
-
+const bcrypt = require('bcryptjs');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -8,27 +9,34 @@ module.exports = {
       [
         {
           email: 'admin@admin.com',
-          password: 'admin',
+          password: await bcrypt.hash('admin', 5),
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           email: 'test@test.com',
-          password: 'test',
+          password: await bcrypt.hash('test', 5),
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           email: 'test1@test1.com',
-          password: 'test1',
+          password: await bcrypt.hash('test1', 5),
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           email: 'test2@test2.com',
-          password: 'test2',
+          password: await bcrypt.hash('test2', 5),
           createdAt: new Date(),
           updatedAt: new Date(),
+        },
+        {
+          email: 'withinviter@withinviter.com',
+          password: await bcrypt.hash('withinviter', 5),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          invitedBy: 1,
         },
       ],
       {},

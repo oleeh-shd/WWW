@@ -32,6 +32,13 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      {
+        amount: 7000,
+        currency: 'USD',
+        userId: 5,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ]);
   },
 

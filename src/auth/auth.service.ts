@@ -27,15 +27,24 @@ export class AuthService {
       throw new HttpException('email already in use', HttpStatus.BAD_REQUEST);
     }
     const hashPassword = await bcrypt.hash(userDto.password, 5);
+
+    if (userDto.invitedBy) {
+      const user = await this.userService.createUser({
+        ...userDto,
+        password: hashPassword,
+      });
+      return user;
+    }
+
     const user = await this.userService.createUser({
       ...userDto,
       password: hashPassword,
     });
-    return this.generateToken(user);
+    return user;
   }
 
   private async generateToken(user: User) {
-    const payload = { email: user.email, id: user.id, roles: user.roles };
+    const payload = { email: user.email, id: user.id };
     return {
       token: this.jwtService.sign(payload),
     };

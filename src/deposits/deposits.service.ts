@@ -65,12 +65,28 @@ export class DepositsService {
 
   @Cron('0 10 * * * *')
   async increaceDeposit() {
-    const deposits = await this.depositRepository.findAll();
+    const deposits = await this.depositRepository.findAll({
+      order: [['id', 'DESC']],
+    });
+    const users = await this.userService.getAllUsers();
+    const usersWithInviter = users.filter(({ invitedBy }) => invitedBy);
     if (!deposits.length) {
       return;
     }
 
-    deposits.forEach(async ({ amount, id }) => {
+    deposits.forEach(async ({ amount, id, userId }) => {
+      usersWithInviter.forEach(async ({ id, invitedBy }) => {
+        const inviteesDeposit = userId === id;
+
+        if (inviteesDeposit) {
+          const inviteesEarning = amount * 0.01;
+          await this.depositRepository.increment('amount', {
+            by: inviteesEarning * 0.1,
+            where: { userId: invitedBy },
+          });
+        }
+      });
+
       await this.depositRepository.increment('amount', {
         by: amount * 0.01,
         where: { id },

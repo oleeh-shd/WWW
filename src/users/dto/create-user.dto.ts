@@ -5,4 +5,6 @@ export class CreateUserDto {
   readonly email: string;
   @ApiProperty({ example: '123123123', description: 'password' })
   readonly password: string;
+  @ApiProperty({ example: '1', description: 'invitors id' })
+  readonly invitedBy: number | null;
 }
