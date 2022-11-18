@@ -52,14 +52,15 @@ export class DepositsService {
   }
 
   async makeDeposit({ email, ...dto }: CreateDepositDto) {
-    const deposit = await this.depositRepository.create(dto);
     const role = await this.roleService.getRoleByValue(UserRoles.INVESTOR);
     const user = await this.userService.getUserByEmail(email);
 
-    if (!user.roles.some((existRole) => existRole.id === role.id)) {
-      await user.$add('roles', role.id);
-      await user.reload({ include: [Role] });
+    if (user.roles.some((existRole) => existRole.id === role.id)) {
+      throw new HttpException('You are already have deposit', 403);
     }
+    const deposit = await this.depositRepository.create(dto);
+    await user.$add('roles', role.id);
+    await user.reload({ include: [Role] });
 
     return deposit;
   }
