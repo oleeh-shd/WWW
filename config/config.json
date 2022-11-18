@@ -5,7 +5,7 @@
     "database": "www",
     "host": "localhost",
     "dialect": "postgres",
-    "port": 5433
+    "port": 4201
   },
   "test": {
     "username": "postgres",
@@ -13,7 +13,7 @@
     "database": "www",
     "host": "localhost",
     "dialect": "postgres",
-    "port": 5433
+    "port": 4201
   },
   "production": {
     "username": "postgres",
@@ -21,6 +21,6 @@
     "database": "www",
     "host": "localhost",
     "dialect": "postgres",
-    "port": 5433
+    "port": 4201
   }
 }
