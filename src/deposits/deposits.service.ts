@@ -99,7 +99,7 @@ export class DepositsService {
   async withdrawDeposit(id: number, amount: number) {
     const deposit = await this.depositRepository.findOne({
       where: {
-        id,
+        userId: id,
       },
     });
 
@@ -108,7 +108,7 @@ export class DepositsService {
     }
     const updatedDeposit = await this.depositRepository.decrement('amount', {
       by: amount,
-      where: { id },
+      where: { userId: id },
     });
     return updatedDeposit;
   }
@@ -116,12 +116,12 @@ export class DepositsService {
   async updateDeposit(id: number, amount: number) {
     const updatedDeposit = await this.depositRepository.increment('amount', {
       by: amount,
-      where: { id },
+      where: { userId: id },
     });
     return updatedDeposit;
   }
 
   async getDepositById(id: number) {
-    return await this.depositRepository.findOne({ where: { id } });
+    return await this.depositRepository.findOne({ where: { userId: id } });
   }
 }

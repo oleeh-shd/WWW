@@ -42,14 +42,14 @@ export class DepositsController {
     return this.depositsServices.withdrawAnySum(updateDepositDto.amount);
   }
 
-  @ApiOperation({ summary: 'get deposit by id' })
+  @ApiOperation({ summary: 'get deposit by user id' })
   @ApiResponse({ status: 200, type: Deposit })
   @Roles(UserRoles.INVESTOR, UserRoles.ADMIN)
   @UseGuards(RolesGuard)
   @UseGuards(JwtAuthGuard)
-  @Get('/:id')
-  getOne(@Param('id') id: number) {
-    return this.depositsServices.getDepositById(id);
+  @Get('/:userId')
+  getOne(@Param('userId') userId: number) {
+    return this.depositsServices.getDepositById(userId);
   }
 
   @ApiOperation({ summary: 'make deposit' })
@@ -65,9 +65,12 @@ export class DepositsController {
   @Roles(UserRoles.INVESTOR, UserRoles.ADMIN)
   @UseGuards(RolesGuard)
   @UseGuards(JwtAuthGuard)
-  @Patch('/:id')
-  update(@Param('id') id: number, @Body() updateDepositDto: UpdateDepositDto) {
-    return this.depositsServices.updateDeposit(id, updateDepositDto.amount);
+  @Patch('/:userId')
+  update(
+    @Param('userId') userId: number,
+    @Body() updateDepositDto: UpdateDepositDto,
+  ) {
+    return this.depositsServices.updateDeposit(userId, updateDepositDto.amount);
   }
 
   @ApiOperation({ summary: 'withdraw deposit' })
@@ -75,11 +78,14 @@ export class DepositsController {
   @Roles(UserRoles.INVESTOR, UserRoles.ADMIN)
   @UseGuards(RolesGuard)
   @UseGuards(JwtAuthGuard)
-  @Post('/:id')
+  @Post('/:userId')
   withdraw(
-    @Param('id') id: number,
+    @Param('userId') userId: number,
     @Body() updateDepositDto: UpdateDepositDto,
   ) {
-    return this.depositsServices.withdrawDeposit(id, updateDepositDto.amount);
+    return this.depositsServices.withdrawDeposit(
+      userId,
+      updateDepositDto.amount,
+    );
   }
 }
