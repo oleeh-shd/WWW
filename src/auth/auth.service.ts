@@ -16,8 +16,7 @@ export class AuthService {
     private userService: UsersService,
     private jwtService: JwtService,
   ) {}
-  async login(userDto: CreateUserDto) {
-    const user = await this.validateUser(userDto);
+  async login(user: User) {
     return this.generateToken(user);
   }
 
@@ -46,18 +45,18 @@ export class AuthService {
   private async generateToken(user: User) {
     const payload = { email: user.email, id: user.id };
     return {
-      token: this.jwtService.sign(payload),
+      access_token: this.jwtService.sign(payload),
     };
   }
 
-  private async validateUser(userDto: CreateUserDto) {
+  async validateUser(userDto: Partial<User>) {
     const user = await this.userService.getUserByEmail(userDto.email);
     const passwordEquals = await bcrypt.compare(
       userDto.password,
       user.password,
     );
     if (user && passwordEquals) {
-      return user;
+      return user.dataValues;
     }
     throw new UnauthorizedException({ message: 'wrong email or password' });
   }

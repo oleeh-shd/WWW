@@ -29,10 +29,10 @@ import { ScheduleModule } from '@nestjs/schedule';
       autoLoadModels: true,
       synchronize: false,
     }),
+    AuthModule,
     ScheduleModule.forRoot(),
     UsersModule,
     RolesModule,
-    AuthModule,
     DepositsModule,
   ],
 })

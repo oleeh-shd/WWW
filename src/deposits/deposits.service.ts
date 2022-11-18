@@ -6,6 +6,7 @@ import { UsersService } from 'src/users/users.service';
 import { Deposit } from './deposits.model';
 import { CreateDepositDto } from './dto/create-deposit.dto';
 import { Cron } from '@nestjs/schedule';
+import { Role } from 'src/roles/roles.model';
 
 @Injectable()
 export class DepositsService {
@@ -57,7 +58,8 @@ export class DepositsService {
 
     if (!user.roles.some((existRole) => existRole.id === role.id)) {
       await user.$add('roles', role.id);
-      user.roles = [...user.roles, role];
+      await user.reload({ include: [Role] });
+      //   user.roles = [...user.roles, role];
     }
 
     return deposit;
