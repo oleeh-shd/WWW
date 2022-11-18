@@ -59,13 +59,12 @@ export class DepositsService {
     if (!user.roles.some((existRole) => existRole.id === role.id)) {
       await user.$add('roles', role.id);
       await user.reload({ include: [Role] });
-      //   user.roles = [...user.roles, role];
     }
 
     return deposit;
   }
 
-  @Cron('0 10 * * * *')
+  @Cron('0 0 0 * * *')
   async increaceDeposit() {
     const deposits = await this.depositRepository.findAll({
       order: [['id', 'DESC']],

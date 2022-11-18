@@ -9,3 +9,8 @@
 ## API
 
 [Link to API](http://localhost:5000/api)
+
+## ADMIN CREDENTIALS
+
+email: admin@admin.com
+password: admin
